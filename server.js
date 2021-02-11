@@ -10,9 +10,8 @@ mongoose.connect('mongodb://localhost/blog', { useNewUrlParser: true, useUnified
 // convert ejs to html
 app.set('view engine', 'ejs')
 
-//route 
-//render from article.js
-app.use('/articles', articleRouter)
+// to exist to form in new article
+app.use(express.urlencoded({ extended: false }))
 
 //route
 // render from views/index.ejs
@@ -24,5 +23,10 @@ app.get('/', (req,res)=>{
     }]
     res.render('articles/index', { articles: articles })
 })
+
+//route 
+//render from article.js
+
+app.use('/articles', articleRouter)
 
 app.listen(8000)
