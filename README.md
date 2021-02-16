@@ -20,6 +20,11 @@
 
 ###### 6. we need an action/method for the DELETE. Install a library ```npm i method-override```
 
+###### 7. install ```npm i dompurify jsdom```
+###### ```dompurify``` is to sanitize our html and prevent XSS attacks
+###### ```jsdom``` is to render html inside nodeJS because nodeJS doesn't know how html works
+###### https://www.npmjs.com/package/dompurify
+
 ##### note: 
 
 ###### 1. to get the current date, in ```index.ejs``` 
@@ -94,3 +99,29 @@ router.post('/', async (req,res) => {
     }
  }) 
  ```  
+###### 5. To prevent XSS attacks and sanitize our HTML:
+```./models/article``` 
+```
+const marked = require('marked')
+const createDomPurify = require('dompurify')
+const { JSDOM } = require('jsdom') // {} because we just want a portion what we want to return from jsdom
+const dompurify = createDomPurify(new JSDOM().window) // allow to purify by using JSDOM().window function
+
+},
+    sanitizedHtml:{
+        type: String,
+        required: true
+    }
+    
+articleSchema.pre('validate', function(next){
+    if (this.title){
+        this.slug = slugify(this.title, {
+            lower: true, // slug is lower case
+            strict: true // make sure we don't end the title but just letters
+        })
+    }
+if (this.markdown){
+        this.sanitizedHtml = dompurify.sanitize(marked(this.markdown))
+    }
+
+```

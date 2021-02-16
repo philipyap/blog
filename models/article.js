@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 const marked = require('marked')
 const slugify = require('slugify')
+const createDomPurify = require('dompurify')
+const { JSDOM } = require('jsdom') // {} because we just want a portion what we want to return from jsdom
+const dompurify = createDomPurify(new JSDOM().window) // allow to purify by using JSDOM().window function
 
 const articleSchema = new mongoose.Schema({
     title: {
@@ -22,6 +25,10 @@ const articleSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true // to make sure we only have one slug
+    },
+    sanitizedHtml:{
+        type: String,
+        required: true
     }
 })
 
@@ -34,6 +41,13 @@ articleSchema.pre('validate', function(next){
             strict: true // make sure we don't end the title but just letters
         })
     }
+
+    if (this.markdown){
+        // (marked(this.markdown)) = convert our markdown to html
+        // dompurify.sanitize(marked(this.markdown))  = purify any bad code when we convert our markdown in html
+        this.sanitizedHtml = dompurify.sanitize(marked(this.markdown)) 
+    }
+
     next()
 })
 
