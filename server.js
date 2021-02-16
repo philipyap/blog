@@ -1,11 +1,11 @@
 const express = require('express')
 const mongoose = require('mongoose') //library
-const Article = require('./model/article')
+const Article = require('./models/article')
 const articleRouter = require('./routes/articles')
 const app = express()
 
 //connect to our database
-mongoose.connect('mongodb://localhost/blog', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost/blog', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 
 //view engine
 // convert ejs to html
