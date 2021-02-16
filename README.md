@@ -18,7 +18,7 @@
 ###### ``` marked``` is to turn markdown into HTML
 ###### ``` slugify ``` is convert something to friendly url slug
 
-###### 6. we need an action/method for the DELETE. Install a library ```npm i method-override```
+###### 6. we need an action/method for the DELETE/PUT. Install a library ```npm i method-override``` https://dev.to/moz5691/method-override-for-put-and-delete-in-html-3fp2
 
 ###### 7. install ```npm i dompurify jsdom```
 ###### ```dompurify``` is to sanitize our html and prevent XSS attacks
@@ -112,7 +112,7 @@ const dompurify = createDomPurify(new JSDOM().window) // allow to purify by usin
         type: String,
         required: true
     }
-    
+
 articleSchema.pre('validate', function(next){
     if (this.title){
         this.slug = slugify(this.title, {
