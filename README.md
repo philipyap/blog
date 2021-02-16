@@ -27,4 +27,11 @@ const mongoose = require('mongoose')
 
 mongoose.connect('mongodb://localhost/blog', { useNewUrlParser: true, useUnifiedTopology: true })
 ```
-
+###### 3. to first show the latest blog post:
+in ```server.js``` 
+```
+app.get('/', async (req,res)=>{
+    const articles = await Article.find().sort({createdAt: 'desc'}) /// {createdAt:'desc} to show the latest post
+    res.render('articles/index', { articles: articles })
+})
+```
