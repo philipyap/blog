@@ -7,8 +7,10 @@ router.get('/new', (req, res) =>{
 })
 
 // return back to the page
-router.get('/:id', (req, res) => {
-    res.send(req.params.id)
+router.get('/:id', async (req, res) => {
+    const article = await Article.findById(req.params.id)
+    if (article == null) res.redirect('/')
+    res.render('articles/show', { article: article })
 
 })
 
