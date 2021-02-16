@@ -125,3 +125,49 @@ if (this.markdown){
     }
 
 ```
+
+###### 6. edit route:
+###### ```article.js```
+```
+// edit route
+router.get('/edit/:id', async (req,res) => {
+    const article = await Article.findById(req.params.id)
+    res.render('articles/edit', { article: article })
+})
+```
+###### create a middleware for put route. Just use the value we have in post route already and turn it to a function 
+```
+// middleware to pass in to put and post route
+function saveArticleAndRedirect(path) {
+    return async (req,res) => {
+        let article = req.article
+            article.title = req.body.title
+            article.description = req.body.description
+            article.markdown = req.body.markdown
+        
+        try{
+            article = await article.save()
+            res.redirect(`/articles/${article.slug}`)
+        } catch (e) {
+            res.render(`/articles/${path}`, { article: article })
+        }
+     }
+    }
+
+```
+###### the rewrite the post route and create a new put route
+```
+// post to article page
+// next parameter means to go on to the next function on the list
+router.post('/', async (req, res, next) => {
+    req.article = new Article()
+    next()
+ }, saveArticleAndRedirect('new')) // pass in middleware and direct to new page
+ 
+// put route for showing after edit
+// method is about same as post route above
+router.put('/:id', async (req, res, next) => {
+    req.article = await Article.findById(req.params.id)
+    next()
+ }, saveArticleAndRedirect('edit')) // pass in middleware and direct to edit page
+```
