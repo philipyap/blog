@@ -15,8 +15,10 @@
 ```    
 
 ###### 5. install ``` npm i marked slugify ```
-``` marked``` is to turn markdown into HTML
-``` slugify ``` is convert something to url slug
+###### ``` marked``` is to turn markdown into HTML
+###### ``` slugify ``` is convert something to friendly url slug
+
+###### 6. we need an action/method for the DELETE. Install a library ```npm i method-override```
 
 ##### note: 
 

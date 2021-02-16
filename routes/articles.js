@@ -14,6 +14,7 @@ router.get('/:slug', async (req, res) => {
 
 })
 
+// post to article page
 router.post('/', async (req,res) => {
     let article = new Article({
         title: req.body.title,
@@ -26,6 +27,12 @@ router.post('/', async (req,res) => {
     } catch (e) {
         res.render('/articles/new', { article: article })
     }
- })   
+ })
+ 
+ // delete route
+router.delete('/:id', async (req,res) => {
+    await Article.findByIdAndDelete(req.params.id)
+    res.redirect('/')
+})
 
 module.exports = router
